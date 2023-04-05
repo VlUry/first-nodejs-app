@@ -12,9 +12,13 @@ async function getNotes() {
 async function printNotes() {
   const notes = await getNotes();
 
-  console.log(chalk.blue("Here is the list of notes:"));
-  for (i = 0; i < notes.length; i++) {
-    console.log(chalk.blueBright(`${notes[i].id} ${notes[i].title}`));
+  if (notes.length) {
+    console.log(chalk.blue("Here is the list of notes:"));
+    for (i = 0; i < notes.length; i++) {
+      console.log(chalk.blueBright(`${notes[i].id} ${notes[i].title}`));
+    }
+  } else {
+    console.log(chalk.blue("There are no notes in the list."));
   }
 }
 
@@ -25,20 +29,24 @@ async function addNote(title) {
     title,
     id: Date.now().toString(),
   };
-  notes.push(note);
 
+  notes.push(note);
   await fs.writeFile(notesPath, JSON.stringify(notes));
 
-  console.log(chalk.bgGreen("Note was added!"));
+  console.log(chalk.green("Note was added."));
 }
 
 async function removeNote(id) {
   const notes = await getNotes();
-  const filteredNotes = notes.filter((note) => note.id !== id);
 
-  await fs.writeFile(notesPath, JSON.stringify(filteredNotes));
+  if (notes.find((note) => note.id === id)) {
+    const filteredNotes = notes.filter((note) => note.id !== id);
+    await fs.writeFile(notesPath, JSON.stringify(filteredNotes));
 
-  console.log(chalk.bgRed("Note was deleted!"));
+    console.log(chalk.red("Note was deleted."));
+  } else {
+    console.log(chalk.red(`There is no note with id ${id} in the list.`));
+  }
 }
 
 module.exports = { addNote, removeNote, printNotes };
