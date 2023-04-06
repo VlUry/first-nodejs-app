@@ -14,7 +14,7 @@ async function printNotes() {
 
   if (notes.length) {
     console.log(chalk.blue("Here is the list of notes:"));
-    for (i = 0; i < notes.length; i++) {
+    for (let i = 0; i < notes.length; i++) {
       console.log(chalk.blueBright(`${notes[i].id} ${notes[i].title}`));
     }
   } else {
@@ -49,4 +49,4 @@ async function removeNote(id) {
   }
 }
 
-module.exports = { addNote, removeNote, printNotes };
+module.exports = { addNote, removeNote, printNotes, getNotes };
