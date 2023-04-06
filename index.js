@@ -1,4 +1,5 @@
 const http = require("http");
+const express = require("express");
 const chalk = require("chalk");
 const fs = require("fs/promises");
 const path = require("path");
@@ -9,31 +10,17 @@ const port = 3000;
 
 const basePath = path.join(__dirname, "./pages");
 
-const server = http.createServer(async (req, res) => {
-  if (req.method === "GET") {
-    const content = await fs.readFile(path.join(basePath, "index.html"));
+const app = express();
 
-    res.writeHead(200, { "Content-Type": "text/html" });
+app.use(express.urlencoded({ extended: true }));
 
-    res.end(content);
-  }
+app.get("/", (req, res) => res.sendFile(path.join(basePath, "index.html")));
 
-  if (req.method === "POST") {
-    const body = [];
-
-    res.writeHead(200, { "Content-Type": "text/plain" });
-
-    req.on("data", (data) => body.push(Buffer.from(data)));
-
-    req.on("end", () => {
-      const title = body.toString().split("=")[1].replaceAll("+", " ");
-      addNote(title);
-
-      res.end(`Note ${title} created.`);
-    });
-  }
+app.post("/", async (req, res) => {
+  await addNote(req.body);
+  res.sendFile(path.join(basePath, "index.html"));
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(chalk.green(`Server is started on port ${port}...`));
 });
