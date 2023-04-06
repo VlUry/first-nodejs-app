@@ -1,46 +1,14 @@
-const yargs = require("yargs");
-const pkg = require("./package.json");
+const http = require("http");
+const chalk = require("chalk");
 
-const { addNote, removeNote, printNotes } = require("./notes.controller");
+const port = 3000;
 
-yargs.version(pkg.version);
+const server = http.createServer((req, res) => {
+  console.log("server");
 
-yargs.command({
-  command: "add",
-  describe: "Add new note to list",
-  builder: {
-    title: {
-      type: "string",
-      desctiption: "Title of new note",
-      demandOption: true,
-    },
-  },
-  handler({ title }) {
-    addNote(title);
-  },
+  res.end("Privet");
 });
 
-yargs.command({
-  command: "list",
-  describe: "Print all notes",
-  handler() {
-    printNotes();
-  },
+server.listen(port, () => {
+  console.log(chalk.green(`Server is started on port ${port}...`));
 });
-
-yargs.command({
-  command: "remove",
-  describe: "Remove note by id",
-  builder: {
-    id: {
-      type: "string",
-      description: "Id of note",
-      demandOption: true,
-    },
-  },
-  handler({ id }) {
-    removeNote(id);
-  },
-});
-
-yargs.parse();
