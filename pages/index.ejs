@@ -7,19 +7,30 @@
   <title><%= title %></title>
 </head>
 <body>
+  <% if (created) { %>
+    <div>Note has been created!</div>
+  <% } %>
   <h1><%= title %></h1>
   <form action="/" method="post">
     <input type="text" name="title" required>
     <button type="submit">Create</button>
   </form>
+  <% if (notes.length) { %>
   <div>
     <ul>
-      <% for (let i = notes.length - 1; i >= 0; i--) {%>
+      <% for (let i = notes.length - 1; i >= 0; i--) { %>
         <li>
-          <%= notes[i].title%>
+          <button data-type="remove" data-id="<%= notes[i].id %>">
+            <%= notes[i].title %>
+          </button>
         </li>
-      <% }%>
+      <% } %>
     </ul>
   </div>
+  <% } else { %>
+    <p>No notes.</p>
+  <% } %>
+
+  <script src="/app.js"></script>
 </body>
 </html>
