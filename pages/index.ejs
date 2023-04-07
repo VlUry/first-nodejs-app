@@ -20,8 +20,12 @@
     <ul>
       <% for (let i = notes.length - 1; i >= 0; i--) { %>
         <li>
-          <button data-type="remove" data-id="<%= notes[i].id %>">
+          <span>
             <%= notes[i].title %>
+          </span>
+          <button data-type="edit" data-id="<%= notes[i].id %>">edit</button>
+          <button data-type="remove" data-id="<%= notes[i].id %>">
+          x
           </button>
         </li>
       <% } %>

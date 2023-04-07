@@ -49,4 +49,22 @@ async function removeNote(id) {
   }
 }
 
-module.exports = { addNote, removeNote, printNotes, getNotes };
+async function editNote(id, payload) {
+  const notes = await getNotes();
+
+  if (notes.find((note) => note.id === id)) {
+    const editedNotes = notes.map((note) => {
+      if (note.id === id) {
+        return { id, title: payload.title };
+      }
+      return note;
+    });
+    await fs.writeFile(notesPath, JSON.stringify(editedNotes));
+
+    console.log(chalk.yellow("Note was edited."));
+  } else {
+    console.log(chalk.red(`There is no note with id ${id} in the list.`));
+  }
+}
+
+module.exports = { addNote, removeNote, printNotes, getNotes, editNote };
